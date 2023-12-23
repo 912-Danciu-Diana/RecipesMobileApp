@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet, View, TextInput, Text, TouchableOpacity, Alert } from "react-native";
+import { useState, useEffect, useContext } from "react";
+import { StyleSheet, View, TextInput, Text, TouchableOpacity, Alert, TouchableWithoutFeedback, Keyboard } from "react-native";
+import { RecipesContext } from "../contexts/RecipesContext";
 
 export default function EditRecipe({ navigation, route }) {
+    const { updateRecipe } = useContext(RecipesContext);
     const [name, setName] = useState('');
     const [ingredients, setIngredients] = useState('');
     const [preparationTime, setPreparationTime] = useState('');
@@ -16,7 +18,7 @@ export default function EditRecipe({ navigation, route }) {
         setDifficulty(recipe.difficulty);
         setSteps(recipe.steps);
     }, [route.params]);
-    
+
 
     const submitRecipe = () => {
         const newRecipe = {
@@ -28,7 +30,7 @@ export default function EditRecipe({ navigation, route }) {
             key: route.params.recipe.key
         }
         if (name.length > 3 && ingredients.length > 3 && difficulty.length > 3 && steps.length > 3) {
-            route.params.editRecipe((currentRecipes) => currentRecipes.map(recipe => recipe.key == newRecipe.key ? newRecipe: recipe));
+            updateRecipe(newRecipe);
             navigation.goBack();
         }
         else {
@@ -37,26 +39,28 @@ export default function EditRecipe({ navigation, route }) {
     }
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.label}>Name:</Text>
-            <TextInput style={styles.input} placeholder='recipe name' onChangeText={setName} value={name} />
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+            <View style={styles.container}>
+                <Text style={styles.label}>Name:</Text>
+                <TextInput style={styles.input} placeholder='recipe name' onChangeText={setName} value={name} />
 
-            <Text style={styles.label}>Ingredients:</Text>
-            <TextInput style={styles.input} placeholder="Ingredients" onChangeText={setIngredients} value={ingredients} />
+                <Text style={styles.label}>Ingredients:</Text>
+                <TextInput style={styles.input} placeholder="Ingredients" onChangeText={setIngredients} value={ingredients} />
 
-            <Text style={styles.label}>Preparation time:</Text>
-            <TextInput style={styles.input} placeholder="Preparation Time" onChangeText={setPreparationTime} value={preparationTime} />
+                <Text style={styles.label}>Preparation time:</Text>
+                <TextInput style={styles.input} placeholder="Preparation Time" onChangeText={setPreparationTime} value={preparationTime} />
 
-            <Text style={styles.label}>Difficulty:</Text>
-            <TextInput style={styles.input} placeholder="Difficulty" onChangeText={setDifficulty} value={difficulty} />
+                <Text style={styles.label}>Difficulty:</Text>
+                <TextInput style={styles.input} placeholder="Difficulty" onChangeText={setDifficulty} value={difficulty} />
 
-            <Text style={styles.label}>Steps:</Text>
-            <TextInput style={styles.input} placeholder="Steps" onChangeText={setSteps} value={steps} />
+                <Text style={styles.label}>Steps:</Text>
+                <TextInput style={styles.input} placeholder="Steps" onChangeText={setSteps} value={steps} />
 
-            <TouchableOpacity style={styles.button} onPress={submitRecipe}>
-                <Text style={styles.buttonText}>Update Recipe</Text>
-            </TouchableOpacity>
-        </View>
+                <TouchableOpacity style={styles.button} onPress={submitRecipe}>
+                    <Text style={styles.buttonText}>Update Recipe</Text>
+                </TouchableOpacity>
+            </View>
+        </TouchableWithoutFeedback>
     )
 }
 
