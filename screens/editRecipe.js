@@ -27,7 +27,7 @@ export default function EditRecipe({ navigation, route }) {
             preparationTime,
             difficulty,
             steps,
-            key: route.params.recipe.key
+            id: route.params.recipe.id
         }
         if (name.length > 3 && ingredients.length > 3 && difficulty.length > 3 && steps.length > 3) {
             updateRecipe(newRecipe);

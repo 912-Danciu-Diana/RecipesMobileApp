@@ -1,17 +1,17 @@
-import { useState, useContext } from "react";
+import { useContext } from "react";
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, Alert, Button } from "react-native";
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { RecipesContext } from "../contexts/RecipesContext";
 
 export default function Home({ navigation }) {
     const {recipes, deleteRecipe} = useContext(RecipesContext);
-    const deleteRecipeAlert = (key) => {
+    const deleteRecipeAlert = (id) => {
         Alert.alert(
             'Delete Recipe',
             'Are you sure you want to delete this recipe?',
             [
                 { text: 'Cancel', style: 'cancel' },
-                { text: 'OK', onPress: () => deleteRecipe(key) }
+                { text: 'OK', onPress: () => deleteRecipe(id) }
             ],
         );
     }
@@ -34,7 +34,7 @@ export default function Home({ navigation }) {
                                 <TouchableOpacity onPress={() => navigation.navigate('Edit Recipe', { recipe: item })}>
                                     <MaterialIcons name="edit" size={24} />
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={() => deleteRecipeAlert(item.key)}>
+                                <TouchableOpacity onPress={() => deleteRecipeAlert(item.id)}>
                                     <MaterialIcons name="delete" size={24} />
                                 </TouchableOpacity>
                             </View>
